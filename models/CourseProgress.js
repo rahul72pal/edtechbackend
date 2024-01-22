@@ -2,9 +2,14 @@ const mongoose = require("mongoose");
 
 const courseprogressschema = new mongoose.Schema({
   
-  courseId:{
+  courseID:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Courses",
+    ref: "Course",
+  },
+
+  userID:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   
   completevideos:[{

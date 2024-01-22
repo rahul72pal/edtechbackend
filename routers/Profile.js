@@ -8,6 +8,7 @@ const {
   getAllUserDetails,
   updateDisplayPicture,
   getEnrolledCourses,
+  instructorDashboard,
 } = require("../controllers/Profile");
 
 // ********************************************************************************************************
@@ -22,5 +23,7 @@ router.get("/getallUserDetails", auth, getAllUserDetails);
 router.put("/updateDisplayPicture", auth, updateDisplayPicture);
 //get Enrollerd Course
 router.get("/getEnrolledCourse", auth, getEnrolledCourses);
+//instructor fashed board 
+router.post("/instructorDashboard", auth, instructorDashboard);
 
 module.exports  = router

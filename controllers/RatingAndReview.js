@@ -5,6 +5,7 @@ const User = require("../models/User");
 module.exports.addRatingAndReview = async(req,res)=>{
   try {
 
+    console.log("COURSE RATING ADD BODY = ",req.body);
     const {courseId, review , rating} = req.body;
     const userId = req.user.id;
 
@@ -120,7 +121,7 @@ module.exports.getallReview = async(req,res)=>{
                                   .sort({rating: "desc"})
     .populate({
       path: "user",
-      select: "firstName lastName email",
+      select: "firstName lastName email image",
     
     })
     .populate({

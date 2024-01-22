@@ -7,11 +7,14 @@ dotenv.config();
 module.exports.auth = async (req, res,next)=>{
   try {
 
-    // console.log(req);
+    // console.log("REQ = ",req)
+    // console.log("INt the middleware auth = ",(req.headers['authorisation'] || '').replace('Bearer ', ''));
+    // console.log("INt the middleware auth cokkie = ",req.cookies.Toekn);
+    // console.log("INt the middleware auth User = ",req.user)
     const token = req.cookies.Toekn ||
     req.body.token || req.header("Authorisation").replace("Bearer ","");
 
-    // console.log(token);
+    console.log("TOKEN = ",token);
 
     /// token is missing
     if(!token){
@@ -23,16 +26,18 @@ module.exports.auth = async (req, res,next)=>{
 
     //verify the token
     try {
+      console.log("Before comparing =", process.env.JWT_SECRETE);
       const decode = await jwt.verify(token , process.env.JWT_SECRETE);
-      // console.log("Decoded payload = ", decode);
+      console.log("Decoded payload = ", decode);
       req.user = decode;
-      // console.log(req)
+      console.log("REQ.USER = ",req.user);
       // console.log("Req User = ",req.user)
       // console.log("User after decode = ",user)
     } catch (error) {
+      console.log(error);
       return res.status(401).json({
         success: false,
-        message: "Token is invalide while verifying the token"
+        message: "Token is invalide while verifying the token plarse chexk"
       })
     }
 
@@ -52,7 +57,7 @@ module.exports.auth = async (req, res,next)=>{
 module.exports.isStudent = async (req,res,next)=>{
   try {
     
-    if(req.user.accountType !== "student"){
+    if(req.user.accountType !== "Student"){
       return res.status(401).json({
         success: false,
         message: "This is protected route for Student only"
@@ -74,7 +79,7 @@ module.exports.isStudent = async (req,res,next)=>{
 module.exports.isInstructor = async(req,res,next)=>{
   try {
 
-    if(req.user.accountType !== "instructor"){
+    if(req.user.accountType !== "Instructor"){
       return res.status(401).json({
         success: false,
         message: "This is protected route for Instructor only"
@@ -96,7 +101,7 @@ module.exports.isInstructor = async(req,res,next)=>{
 module.exports.isAdmin = async(req,res,next)=>{
   try {
 
-    if(req.user.accountType !== "admin"){
+    if(req.user.accountType !== "Admin"){
       return res.status(401).json({
         success: false,
         message: "This is protected route for Instructor only"

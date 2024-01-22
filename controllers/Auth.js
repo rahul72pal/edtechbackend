@@ -36,7 +36,7 @@ module.exports.sendOtp = async( req,res)=>{
                                     }
                                    );
   
-    console.log("genrate otp = ",otp);
+    // console.log("genrate otp = ",otp);
   
     //check unique otp or not 
     const result = await OTP.findOne({otp: otp});
@@ -54,7 +54,7 @@ module.exports.sendOtp = async( req,res)=>{
     const otpbody = await OTP.create(otppayload);
     await otpbody.save();
   
-    console.log(" In the send OTP ", otpbody);
+    // console.log(" In the send OTP ", otpbody);
   
     return res.status(200).json({
       success:true,
@@ -63,7 +63,7 @@ module.exports.sendOtp = async( req,res)=>{
     })
     
   } catch (error) {
-    console.log("error in otp send");
+    // console.log("error in otp send");
     console.log(error)
     return res.status(500).json({
       success:false,
@@ -79,20 +79,24 @@ module.exports.Singup = async (req,res)=>{
     
     const {
       firstName , lastName , 
-      email, password , confirmpassword,
+      email, password , confirmPassword,
       accountType ,contactNumber , otp
     } 
     = req.body;
 
+    console.log(firstName ,lastName , 
+               email, password , confirmPassword,
+               accountType , otp);
+
     //validation 
-    if(!firstName || !lastName || !email || !password|| !confirmpassword || !otp){
+    if(!firstName || !lastName || !email || !password|| !confirmPassword || !otp){
       return res.status(403).json({
         success: false,
         message: "Fill the required fields carefully ",
       })
     }
 
-    if(password !== confirmpassword){
+    if(password !== confirmPassword){
       return res.status(400).json({
         success: false,
         message: "Password and confirmpassword Does Not matched ",
@@ -132,13 +136,13 @@ module.exports.Singup = async (req,res)=>{
       gender:null,
       dateOfBirth:null,
       about:null,
-      contactNumber:contactNumber
+      contactNumber:null
     });
     
     const user = await User.create({
       firstName , lastName , 
       email, password:hashedpasswrod ,
-      contactNumber:contactNumber,
+      // contactNumber:contactNumber,
       accountType,
       additionalDetails: profileDetails._id,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
@@ -165,6 +169,7 @@ module.exports.Singup = async (req,res)=>{
 module.exports.login = async( req,res)=>{
   try {
     const {email , password} = req.body;
+    console.log("LOGIN DATA = ", req);
 
     //validation 
     if( !email || !password){
@@ -191,7 +196,7 @@ module.exports.login = async( req,res)=>{
         accountType: user.accountType, 
       }
       const token = jwt.sign(payload , process.env.JWT_SECRETE,{
-        expiresIn: "2h",
+        expiresIn: "5h",
       });
       user.token = token;
       user.password = undefined
@@ -235,7 +240,8 @@ module.exports.changePassword = async(req,res)=>{
     const userDetails = await User.findById(userId);
 
     //get the old password newpassword and confirmpassword 
-    const {oldPassword , newPassword , confirmPassword} = req.body;
+    console.log("CHANGE PPASSWORD = BODY =",req.body);
+    const {oldPassword , newPassword } = req.body;
 
     //Validation
     const isPasswordMatch = await bcrypt.compare(
@@ -247,18 +253,18 @@ module.exports.changePassword = async(req,res)=>{
       // 401 for unAuhtorised error
       return res.status(401).json({
         success: false,
-        message: "Old Password is Does not Machted"
+        message: "Current Password Does not Machted"
       })
     }
 
     //Match new password and confoirm nw password
-    if(newPassword !== confirmPassword){
-      //400 for badrequest
-      return res.status(400).json({
-        success: false,
-        message: "New Password and Confirm Password is Does not Machted"
-      })
-    }
+    // if(newPassword !== confirmPassword){
+    //   //400 for badrequest
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "New Password and Confirm Password is Does not Machted"
+    //   })
+    // }
 
     //upadte the passowrd
     const encrytedPassword = await bcrypt.hash(newPassword,10);

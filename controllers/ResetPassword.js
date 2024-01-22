@@ -53,12 +53,13 @@ module.exports.resetPasswordToken = async (req,res)=>{
 module.exports.resetPassword = async(req,res)=>{
   try {
     // here is token of crypto
-    const {password , confirmPasswprd , token} = req.body;
+    const {password , confirmPassword , token} = req.body;
+    console.log(password,confirmPassword,token)
 
-    if(password !== confirmPasswprd){
+    if(password !== confirmPassword){
       return res.json({
         success: false,
-        message: "Password does not matched"
+        message: "Password does not matched plaese make sure both password are same"
       })
     }
 
@@ -70,6 +71,8 @@ module.exports.resetPassword = async(req,res)=>{
         message: "Token is invalid"
       })
     }
+
+    console.log(userdetails.resetPasswordExpires);
 
     if(userdetails.resetPasswordExpires < Date.now()){
       return res.json({

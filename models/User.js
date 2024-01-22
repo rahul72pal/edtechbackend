@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema({
   },
   contactNumber:{
     type: String,
-    required: true,
+    // required: true,
   },
   accountType:{
     type: String,
-    enum: ["admin", "student","instructor"],
+    enum: ["Admin", "Student","Instructor"],
     required: true,
   },
   additionalDetails:{

@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-const port = 4000 
+const dotenv = require("dotenv");
+const port = process.env.PORT ||4040 
 const path = require('path');
 
 
@@ -9,6 +10,7 @@ const User = require("./routers/User")
 const Course = require("./routers/Course")
 const Profile = require("./routers/Profile")
 const Payment = require("./routers/Payment")
+const Contact = require("./routers/Contact")
 
 const dbconnect = require("./config/database")
 const cloudinary = require("./config/cloudinary")
@@ -17,7 +19,7 @@ const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const cloudinaryconnect = require("./config/cloudinary");
 const fileupload = require("express-fileupload")
-const dotenv = require("dotenv")
+// const dotenv = require("dotenv")
 
 dotenv.config()
 // connect to database and cloudinary
@@ -29,7 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
   
   })
@@ -44,6 +46,7 @@ app.use("/api/v1/auth",User)
 app.use("/api/v1/course",Course)
 app.use("/api/v1/profile",Profile)
 app.use("/api/v1/payment",Payment)
+app.use("/api/v1/reach",Contact)
 // app.use("/api/v1/auth",User)
 
 app.get("/", (req, res) => {

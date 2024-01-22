@@ -31,10 +31,16 @@ const courseSchema = new mongoose.Schema({
   thumbnail:{
     type: String,
   },
-  tag:{
-    type: [String],
-    required: true
+  instructions:{
+    type: String,
   },
+  status:{
+    type: String,
+  },
+  tag:[{
+    type: String,
+    required: true
+  }],
     category:{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category"
@@ -45,7 +51,13 @@ const courseSchema = new mongoose.Schema({
       required: true,
       ref: "User"
     }
-  ]
+  ],
+  createdAt:{
+      type: Date,
+    },
+  duration:{
+    type: String
+  }
 });
 
 module.exports = mongoose.model("Course",courseSchema);

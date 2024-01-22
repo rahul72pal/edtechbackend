@@ -8,6 +8,10 @@ const{
   createCourse,
   allcourses,
   getCourseDetails,
+  editCourse,
+  getInstructorCourse,
+  deleteCourse,
+  getFullCourseDetails,
 } = require("../controllers/Course");
 
 //Categories Controllers Import
@@ -38,6 +42,10 @@ const {
   getallReview,
 } = require("../controllers/RatingAndReview");
 
+const {
+  updateCourseProgress
+} = require("../controllers/CourseProgress")
+
 const {auth,isStudent,isInstructor,isAdmin} = require("../middlewares/auth");
 
 //importing the routes
@@ -59,11 +67,21 @@ router.post("/createSubSection",auth, isInstructor , createSubsection)
 //Update the subsection
 router.post("/updateSubSection",auth, isInstructor , updateSubsection)
 //Delete a subsection
-router.post("/deleteSubSection",auth, isInstructor , deleteSubSection)
+router.delete("/deleteSubSection",auth, isInstructor , deleteSubSection)
 // get the All courses
 router.get("/getallcourse", allcourses)
 //get Details for a specific Course
-router.get("/getCourseDetails", getCourseDetails)
+router.post("/getCourseDetails", getCourseDetails)
+// getFullCourseDetails
+router.post("/getFullCourseDetails",auth, isStudent, getFullCourseDetails)
+//edit course api route
+router.post('/editCourse',auth,isInstructor,editCourse)
+// get the instructor courses
+router.get("/getInstructorCourses", auth , isInstructor , getInstructorCourse)
+//dleete a course of the instructor
+router.delete("/deleteCourse",auth,isInstructor,deleteCourse)
+//mark to complete the video
+router.post("/updateCourseProgress",auth, isStudent,updateCourseProgress);
 
 // ********************************************************************************************************
 //                                      Category routes
